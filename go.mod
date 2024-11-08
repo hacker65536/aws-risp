@@ -1,4 +1,4 @@
-module github.com/hacker65536/aws-spri
+module github.com/hacker65536/aws-risp
 
 go 1.21.3
 
