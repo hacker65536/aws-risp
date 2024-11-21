@@ -24,3 +24,9 @@ func TestToInt(t *testing.T) {
 	i := ToInt(s)
 	t.Logf("i %d", i)
 }
+
+func TestTo2dp(t *testing.T) {
+	s := "87.1339690972"
+	i := To2dp(s)
+	t.Logf("i %s", i)
+}

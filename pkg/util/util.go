@@ -39,6 +39,10 @@ func ToInt(s string) int {
 	f, _ := strconv.ParseFloat(s, 64)
 	return int(f)
 }
+func To2dp(s string) string {
+	f, _ := strconv.ParseFloat(s, 64)
+	return strconv.FormatFloat(f, 'f', 2, 64)
+}
 
 func Platform(s string) string {
 	switch s {
