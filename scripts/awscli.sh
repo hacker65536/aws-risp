@@ -1,0 +1,1 @@
+aws pricing describe-services --region us-east-1 --query "Services[*].ServiceCode.[@]" --output text | sort > ../docs/service-codes.txt
