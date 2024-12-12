@@ -16,7 +16,7 @@ var start, end string
 // rsvCovCmd represents the rsvCov command
 var rsvCovCmd = &cobra.Command{
 	Use:   "rsvCov",
-	Short: "A brief description of your command",
+	Short: "Reservation Coverage",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
