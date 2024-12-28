@@ -28,15 +28,17 @@ var (
 )
 
 var (
-	awsPricingServiceCode map[string]string = map[string]string{
-		"rds":           "AmazonRDS",
-		"ec2":           "AmazonEC2",
-		"elasticache":   "AmazonElastiCache",
-		"opensearch":    "AmazonOpenSearchService",
-		"memorydb":      "AmazonMemoryDB",
-		"redshift":      "AmazonRedshift",
-		"elasticsearch": "AmazonES",
-	}
+	/*
+		awsPricingServiceCode map[string]string = map[string]string{
+			"rds":           "AmazonRDS",
+			"ec2":           "AmazonEC2",
+			"elasticache":   "AmazonElastiCache",
+			"opensearch":    "AmazonOpenSearchService",
+			"memorydb":      "AmazonMemoryDB",
+			"redshift":      "AmazonRedshift",
+			"elasticsearch": "AmazonES",
+		}
+	*/
 	awsCeServiceFilter map[string]string = map[string]string{
 		"rds":           "Amazon Relational Database Service",
 		"ec2":           "Amazon Elastic Compute Cloud - Compute",
