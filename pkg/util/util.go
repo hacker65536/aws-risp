@@ -2,6 +2,7 @@ package util
 
 import (
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -52,14 +53,11 @@ func To2dp(s string) string {
 	return strconv.FormatFloat(f, 'f', 2, 64)
 }
 
-func Platform(s string) string {
-	switch s {
-	case "Aurora PostgreSQL":
-		return "Aurora-PostgreSQL"
-	default:
-		if s == "" {
-			return "null"
-		}
-		return s
+func ToLowers(s []string) []string {
+
+	var lowerStr []string
+	for _, v := range s {
+		lowerStr = append(lowerStr, strings.ToLower(v))
 	}
+	return lowerStr
 }
