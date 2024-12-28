@@ -30,3 +30,16 @@ func TestTo2dp(t *testing.T) {
 	i := To2dp(s)
 	t.Logf("i %s", i)
 }
+
+func TestToLowers(t *testing.T) {
+	s := []string{"A", "B", "C"}
+	i := ToLowers(s)
+	t.Logf("i %v", i)
+}
+
+func BenchmarkToLowers(b *testing.B) {
+	s := []string{"A", "B", "C"}
+	for i := 0; i < b.N; i++ {
+		ToLowers(s)
+	}
+}

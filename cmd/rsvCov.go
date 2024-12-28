@@ -4,7 +4,6 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"log"
 	"slices"
 
 	"github.com/hacker65536/aws-risp/pkg/myaws"
@@ -20,30 +19,43 @@ var rsvCovCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Println("rsvCov called")
-		if len(args) == 0 {
-			allsvc := []string{
-				"ec2",
-				"rds",
-				"elasticache",
-				"redshift",
-				"opensearch",
-				"memorydb",
-			}
-			myaws.RsvConv(allsvc)
-		} else if len(args) > 6 {
-			log.Fatal("Too many arguments")
-		}
-
-		// sort and compact the input
-		slices.Sort(args)
-		unique := slices.Compact(args)
+		ma := myaws.New()
 		if start != "" {
 			myaws.Start = start
 		}
 		if end != "" {
 			myaws.End = end
 		}
-		myaws.RsvConv(unique)
+		slices.Sort(args)
+		unique := slices.Compact(args)
+		for _, svc := range unique {
+			ma.AddService(svc)
+		}
+		ma.GetReservationCoverage()
+		/*
+			if len(args) == 0 {
+				allsvc := []string{
+					"ec2",
+					"rds",
+					"elasticache",
+					"redshift",
+					"opensearch",
+					"memorydb",
+				}
+				myaws.RsvConv(allsvc)
+			} else if len(args) > 6 {
+				log.Fatal("Too many arguments")
+			}
+
+			// sort and compact the input
+			if start != "" {
+				myaws.Start = start
+			}
+			if end != "" {
+				myaws.End = end
+			}
+			myaws.RsvConv(unique)
+		*/
 	},
 }
 

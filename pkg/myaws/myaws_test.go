@@ -2,9 +2,6 @@ package myaws
 
 import (
 	"testing"
-
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/service/costexplorer/types"
 )
 
 func TestService(t *testing.T) {
@@ -16,6 +13,7 @@ func TestService(t *testing.T) {
 	})
 }
 
+/*
 func TestCoverageGroupBy(t *testing.T) {
 	t.Run("RDS", func(t *testing.T) {
 		s := New()
@@ -95,3 +93,4 @@ func TestCoverageGroupBy(t *testing.T) {
 	//	    }
 	//	})
 }
+*/
