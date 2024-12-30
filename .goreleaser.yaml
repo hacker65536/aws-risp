@@ -19,9 +19,10 @@ builds:
   - env:
       - CGO_ENABLED=0
     goos:
-#      - linux
+      - linux
 #      - windows
       - darwin
+
 
 archives:
   - format: tar.gz
