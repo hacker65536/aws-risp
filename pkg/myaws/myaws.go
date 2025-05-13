@@ -1,3 +1,4 @@
+// filepath: /Users/go-sujun/aws-risp/pkg/myaws/myaws.go
 package myaws
 
 import (
@@ -11,54 +12,71 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/costexplorer/types"
 )
 
+// init initializes the package by setting default values for Start and End time range
 func init() {
+	// Initialize time range with default values if not explicitly set
 	Start, End = util.StartEnd(Start, End)
-
-	// log.Infof("Start: %s, End: %s", Start, End)
 }
 
+// MyAWS represents the main AWS client with configured services
 type MyAWS struct {
+	// AWS SDK configuration
 	cfg aws.Config
-	//Service
+	// Map of configured AWS services
 	SVCs map[string]Service
 }
 
+// Service represents an AWS service configuration for Cost Explorer queries
 type Service struct {
-	ServiceFilter    string
-	GroupByKey       []string
+	// The service filter string used in Cost Explorer API
+	ServiceFilter string
+	// Keys used for grouping results in Cost Explorer API
+	GroupByKey []string
+	// Group definitions for Cost Explorer API calls
 	GroupDefinitions []types.GroupDefinition
-	Attributes       []string
-	Coverage         []string
+	// Attributes to display in the output
+	Attributes []string
+	// Coverage metrics to display in the output
+	Coverage []string
 }
 
+// New creates a new MyAWS instance with initialized AWS configuration
 func New() *MyAWS {
-	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(use1))
+	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(DefaultRegion))
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
 	}
 
 	return &MyAWS{
-		cfg: cfg,
+		cfg:  cfg,
+		SVCs: make(map[string]Service), // Initialize the service map
 	}
 }
+
+// AddService adds a specific AWS service to the MyAWS instance
+// The service is identified by its short name (e.g., "ec2", "rds")
 func (m *MyAWS) AddService(s string) {
-	if m.SVCs == nil {
-		m.SVCs = make(map[string]Service)
+	// Check if the service exists in our configuration
+	serviceFilter, ok := awsCeServiceFilter[s]
+	if !ok {
+		log.Warnf("Service '%s' is not supported or configured", s)
+		return
 	}
 
+	// Create and add the service configuration
 	m.SVCs[s] = Service{
-		ServiceFilter: awsCeServiceFilter[s],
+		ServiceFilter: serviceFilter,
 		GroupByKey:    awsCeGroupBykeys[s],
 		Attributes:    awsCeAttributes[s],
 		Coverage:      awsCeCoverage[s],
 	}
+
+	log.Debugf("Added service: %s (%s)", s, serviceFilter)
 }
 
+// AddAllService adds all configured AWS services to the MyAWS instance
 func (m *MyAWS) AddAllService() {
-	if m.SVCs == nil {
-		m.SVCs = make(map[string]Service)
-	}
-
+	// Add each configured service to the instance
 	for k, v := range awsCeServiceFilter {
 		m.SVCs[k] = Service{
 			ServiceFilter: v,
@@ -66,8 +84,10 @@ func (m *MyAWS) AddAllService() {
 			Attributes:    awsCeAttributes[k],
 			Coverage:      awsCeCoverage[k],
 		}
+		log.Debugf("Added service: %s (%s)", k, v)
 	}
 
+	log.Infof("Added all %d configured services", len(m.SVCs))
 }
 
 /*

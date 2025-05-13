@@ -13,13 +13,18 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "aws-risp",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "AWS Reservation Information Service Provider",
+	Long: `AWS-RISP is a command-line tool for retrieving and displaying 
+information about AWS Reserved Instances (RI).
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+It provides functionality to check reservation coverage and utilization
+for various AWS services including EC2, RDS, ElastiCache, OpenSearch,
+MemoryDB, Redshift, and Elasticsearch.
+
+Examples:
+  aws-risp rsvCov ec2 rds                # Check reservation coverage for EC2 and RDS
+  aws-risp rsvUtil                       # Check reservation utilization for all services
+  aws-risp rsvCov --start 2023-01-01 --end 2023-01-31 ec2  # Specify date range`,
 	Version: "version",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
