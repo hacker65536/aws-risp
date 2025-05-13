@@ -41,7 +41,7 @@ func (m *MyAWS) GetProducts() {
 	resp, err := svc.GetProducts(context.Background(), input)
 
 	if err != nil {
-		log.Fatalf("failed to list tables, %v", err)
+		log.Fatalf("failed to get products: %v", err)
 	}
 
 	log.Infof("resp: %v", resp)
