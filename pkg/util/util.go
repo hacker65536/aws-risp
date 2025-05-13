@@ -6,26 +6,32 @@ import (
 	"time"
 )
 
+// StartEnd returns the start and end dates based on input values.
+// If both start and end are provided, they are returned as is.
+// If either is missing, it returns the date range for the last week.
 func StartEnd(start, end string) (string, string) {
-	// 2022-09-25T16:08:04+0900 > 2025-09-25T16:08:04+0900
 	if start != "" && end != "" {
 		return start, end
 	}
 	return GetLastWeek()
 }
 
+// GetLastWeek returns the start and end dates for the last 7 days.
+// The end date is yesterday and the start date is 6 days before that.
+// Dates are returned in YYYY-MM-DD format.
 func GetLastWeek() (string, string) {
 	t := time.Now()
-	last := t.AddDate(0, 0, -1)
-	first := last.AddDate(0, 0, -6)
+	last := t.AddDate(0, 0, -1)     // Yesterday
+	first := last.AddDate(0, 0, -6) // 7 days ago
 
 	return first.Format("2006-01-02"), last.Format("2006-01-02")
 }
 
+// ToJst converts an RFC3339 timestamp to Japan Standard Time (JST).
+// Returns the time formatted as YYYY-MM-DDThh:mm:ss-0700.
 func ToJst(t string) string {
 	loc, _ := time.LoadLocation("Asia/Tokyo")
 	t1, _ := time.Parse(time.RFC3339, t)
-	//  2006-01-02T15:04:05-0700 > 2025-09-25T16:08:04+0900
 	return t1.In(loc).Format("2006-01-02T15:04:05-0700")
 }
 

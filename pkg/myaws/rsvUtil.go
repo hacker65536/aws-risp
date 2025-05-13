@@ -2,7 +2,6 @@ package myaws
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -16,50 +15,54 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/costexplorer/types"
 )
 
+// GetReservationUtilization retrieves and displays AWS reservation utilization for configured services
 func (m *MyAWS) GetReservationUtilization() {
-
 	log.Infof("Start: %s, End: %s", Start, End)
+
+	// Collect all service filters
 	awsSvcs := []string{}
 	for k := range m.SVCs {
 		awsSvcs = append(awsSvcs, awsCeServiceFilter[k])
 	}
-	log.Debugf("awsSvcs: %v", awsSvcs)
+	log.Debugf("Services: %v", awsSvcs)
 
-	svc := ce.NewFromConfig(m.cfg)
+	// Create Cost Explorer client
+	svc := m.newCostExplorerClient()
+
+	// Prepare API input
 	input := &ce.GetReservationUtilizationInput{
-		TimePeriod: &types.DateInterval{
-			Start: aws.String(Start),
-			End:   aws.String(End),
-		},
+		TimePeriod: createDateInterval(),
 		GroupBy: []types.GroupDefinition{
 			{
 				Key:  aws.String("SUBSCRIPTION_ID"),
 				Type: types.GroupDefinitionTypeDimension,
 			},
 		},
-		Filter: &types.Expression{
-			Dimensions: &types.DimensionValues{
-				Key:    types.Dimension("SERVICE"),
-				Values: awsSvcs,
-			},
-		},
+		Filter: createServiceFilter(awsSvcs),
 	}
 
-	j, _ := json.Marshal(input)
-	log.Debugf("input: %v", string(j))
+	// Log input for debugging
+	logInput(input, "debug")
 
+	// Call AWS API
 	resp, err := svc.GetReservationUtilization(context.Background(), input)
-
 	if err != nil {
-		log.Fatalf("failed to list tables, %v", err)
+		log.Fatalf("failed to get ReservationUtilization: %v", err)
 	}
 
-	// title
-	//	fmt.Println("service accountId accountName endDateTime instanceType numberOfInstances")
+	// Display results in a table
+	displayUtilizationResults(resp)
+}
+
+// displayUtilizationResults formats and displays the utilization results in a table
+func displayUtilizationResults(resp *ce.GetReservationUtilizationOutput) {
 	w := tabwriter.NewWriter(os.Stdout, 0, 8, 3, ' ', 0)
+
+	// Print header row
 	fmt.Fprintln(w, "service\tsubscriptionId\taccountId\taccountName\tendDateTime\tinstanceType\tnumberOfInstances\tplatform\tutilizationPercentage")
+
+	// Print data rows
 	for _, tableName := range resp.UtilizationsByTime[0].Groups {
-		//		fmt.Println(tableName)
 		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d\n",
 			util.ServiceName(tableName.Attributes["service"]),
 			*tableName.Value,
@@ -72,6 +75,7 @@ func (m *MyAWS) GetReservationUtilization() {
 			util.ToInt(aws.ToString(tableName.Utilization.UtilizationPercentage)),
 		)
 	}
+
 	w.Flush()
 }
 

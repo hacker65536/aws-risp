@@ -1,6 +1,9 @@
 package myaws
 
-// supported services
+// AWS Service Codes and related configurations for different AWS services.
+// These configurations are used for querying AWS Cost Explorer API.
+
+// Supported services:
 // - Amazon Elastic Compute Cloud - Compute
 // - Amazon Relational Database Service
 // - Amazon ElastiCache, Amazon Redshift
@@ -8,38 +11,32 @@ package myaws
 // - Amazon OpenSearch Service
 // - Amazon MemoryDB
 
+// Service specific notes for GroupBy dimension:
 // Amazon Relational Database Service
-// Only AZ, INSTANCE_TYPE, LINKED_ACCOUNT, DATABASE_ENGINE, REGION, DEPLOYMENT_OPTION is supported for groupBy with type DIMENSION for Amazon Relational Database Service
+// Only AZ, INSTANCE_TYPE, LINKED_ACCOUNT, DATABASE_ENGINE, REGION, DEPLOYMENT_OPTION is supported for groupBy
 
 // Amazon ElastiCache
-// Only AZ, INSTANCE_TYPE, LINKED_ACCOUNT, CACHE_ENGINE, REGION is supported for groupBy with type DIMENSION for Amazon ElastiCache
+// Only AZ, INSTANCE_TYPE, LINKED_ACCOUNT, CACHE_ENGINE, REGION is supported for groupBy
 
 // Amazon OpenSearch Service
-// Only AZ, INSTANCE_TYPE, LINKED_ACCOUNT, REGION is supported for groupBy with type DIMENSION for Amazon OpenSearch Service
+// Only AZ, INSTANCE_TYPE, LINKED_ACCOUNT, REGION is supported for groupBy
 
 // Amazon MemoryDB
-// Only AZ, INSTANCE_TYPE, LINKED_ACCOUNT, CACHE_ENGINE, REGION is supported for groupBy with type DIMENSION for Amazon MemoryDB
+// Only AZ, INSTANCE_TYPE, LINKED_ACCOUNT, CACHE_ENGINE, REGION is supported for groupBy
 
 // Amazon Elastic Compute Cloud - Compute
-// Only AZ, INSTANCE_TYPE, INSTANCE_TYPE_FAMILY, LINKED_ACCOUNT, PLATFORM, REGION, TENANCY is supported for groupBy with type DIMENSION for Amazon Elastic Compute Cloud - Compute
+// Only AZ, INSTANCE_TYPE, INSTANCE_TYPE_FAMILY, LINKED_ACCOUNT, PLATFORM, REGION, TENANCY is supported for groupBy
 
-var (
-	use1 = "us-east-1"
+// Constants for AWS regions
+const (
+	// DefaultRegion is the default AWS region for API calls
+	DefaultRegion = "us-east-1"
 )
 
+// Global variables for AWS services configuration
 var (
-	/*
-		awsPricingServiceCode map[string]string = map[string]string{
-			"rds":           "AmazonRDS",
-			"ec2":           "AmazonEC2",
-			"elasticache":   "AmazonElastiCache",
-			"opensearch":    "AmazonOpenSearchService",
-			"memorydb":      "AmazonMemoryDB",
-			"redshift":      "AmazonRedshift",
-			"elasticsearch": "AmazonES",
-		}
-	*/
-	awsCeServiceFilter map[string]string = map[string]string{
+	// awsCeServiceFilter maps service shortnames to their full service names used in Cost Explorer
+	awsCeServiceFilter = map[string]string{
 		"rds":           "Amazon Relational Database Service",
 		"ec2":           "Amazon Elastic Compute Cloud - Compute",
 		"elasticache":   "Amazon ElastiCache",
@@ -49,7 +46,8 @@ var (
 		"elasticsearch": "Amazon Elasticsearch Service",
 	}
 
-	awsCeGroupBykeys map[string][]string = map[string][]string{
+	// awsCeGroupBykeys maps service shortnames to the appropriate GroupBy keys
+	awsCeGroupBykeys = map[string][]string{
 		"rds": {
 			//"AZ",
 			"INSTANCE_TYPE",
@@ -101,7 +99,7 @@ var (
 		},
 	}
 
-	awsCeAttributes map[string][]string = map[string][]string{
+	awsCeAttributes = map[string][]string{
 		"rds": {
 			// "az",
 			"instanceType",
@@ -153,7 +151,7 @@ var (
 		},
 	}
 
-	awsCeCoverage map[string][]string = map[string][]string{
+	awsCeCoverage = map[string][]string{
 		"rds": {
 			"OnDemandHours",
 			"ReservedHours",
@@ -198,17 +196,9 @@ var (
 		},
 	}
 
-	/*
-		serviceFilter map[string]string = map[string]string{
-			"RDS":           "Amazon Relational Database Service",
-			"EC2":           "Amazon Elastic Compute Cloud - Compute",
-			"ElastiCache":   "Amazon ElastiCache",
-			"OpenSearch":    "Amazon OpenSearch Service",
-			"MemoryDB":      "Amazon MemoryDB",
-			"Redshift":      "Amazon Redshift",
-			"Elasticsearch": "Amazon Elasticsearch Service",
-		}
-	*/
-
+	// Time range variables for Cost Explorer queries
 	Start, End string
+
+	// Default sort parameter for Cost Explorer results
+	Sort = "OnDemandCost"
 )

@@ -10,6 +10,48 @@ func TestService(t *testing.T) {
 		if s == nil {
 			t.Error("New() returned nil")
 		}
+
+		// Check that SVCs map is initialized
+		if s.SVCs == nil {
+			t.Error("New() should initialize SVCs map")
+		}
+	})
+
+	t.Run("AddService", func(t *testing.T) {
+		s := New()
+
+		// Add a valid service
+		s.AddService("ec2")
+		if _, exists := s.SVCs["ec2"]; !exists {
+			t.Error("AddService() failed to add EC2 service")
+		}
+
+		// Check service properties
+		svc := s.SVCs["ec2"]
+		if svc.ServiceFilter != awsCeServiceFilter["ec2"] {
+			t.Errorf("Expected ServiceFilter %s, got %s", awsCeServiceFilter["ec2"], svc.ServiceFilter)
+		}
+
+		if len(svc.GroupByKey) == 0 {
+			t.Error("GroupByKey should not be empty")
+		}
+
+		if len(svc.Attributes) == 0 {
+			t.Error("Attributes should not be empty")
+		}
+	})
+
+	t.Run("AddAllService", func(t *testing.T) {
+		s := New()
+		s.AddAllService()
+
+		// Check that all services were added
+		expectedServices := []string{"ec2", "rds", "elasticache", "opensearch", "memorydb", "redshift", "elasticsearch"}
+		for _, svcName := range expectedServices {
+			if _, exists := s.SVCs[svcName]; !exists {
+				t.Errorf("AddAllService() failed to add service: %s", svcName)
+			}
+		}
 	})
 }
 

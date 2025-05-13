@@ -9,17 +9,41 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Variables to store command-line flags
+var startUtil, endUtil string
+
 // rsvUtilCmd represents the rsvUtil command
 var rsvUtilCmd = &cobra.Command{
-	Use:   "rsvUtil",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Use:   "rsvUtil [SERVICE...]",
+	Short: "Display AWS Reservation Utilization information",
+	Long: `Display AWS Reservation Utilization information for specified services.
+	
+This command retrieves and displays information about how efficiently
+your Reserved Instances are being utilized.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+If no service is specified, information for all supported services will be displayed.
+
+Supported services:
+- ec2: Amazon EC2
+- rds: Amazon RDS
+- elasticache: Amazon ElastiCache
+- opensearch: Amazon OpenSearch Service
+- memorydb: Amazon MemoryDB
+- redshift: Amazon Redshift
+- elasticsearch: Amazon Elasticsearch Service
+
+Examples:
+  aws-risp rsvUtil
+  aws-risp rsvUtil --start 2023-01-01 --end 2023-01-31 ec2 rds`,
 	Run: func(cmd *cobra.Command, args []string) {
+		// Set date range if provided
+		if startUtil != "" {
+			myaws.Start = startUtil
+		}
+		if endUtil != "" {
+			myaws.End = endUtil
+		}
+
 		// fmt.Println("rsvUtil called")
 		if len(args) == 0 {
 			ma := myaws.New()
@@ -41,13 +65,7 @@ to quickly create a Cobra application.`,
 func init() {
 	rootCmd.AddCommand(rsvUtilCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// rsvUtilCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// rsvUtilCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// Define flags for rsvUtil command
+	rsvUtilCmd.Flags().StringVarP(&startUtil, "start", "s", "", "Start date in YYYY-MM-DD format (defaults to 7 days ago)")
+	rsvUtilCmd.Flags().StringVarP(&endUtil, "end", "e", "", "End date in YYYY-MM-DD format (defaults to yesterday)")
 }
