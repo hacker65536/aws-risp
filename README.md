@@ -73,3 +73,31 @@ aws-risp rsvUtil
 ## ライセンス
 
 [LICENSE](LICENSE) ファイルを参照してください。
+
+## 開発
+
+### Makefileターゲット
+
+このプロジェクトでは、様々な開発・デプロイメントタスクを自動化するためのMakefileが用意されています：
+
+```
+make build      # プログラムをビルドする
+make test       # テストを実行する
+make cover      # カバレッジレポートを生成・表示する
+make lint       # コードの静的解析を実行する
+make fmt        # コードフォーマットを実行する
+make clean      # ビルド成果物をクリーンアップする
+make release    # リリースビルドを作成する
+make doc        # ドキュメントを生成する
+make version    # バージョン情報を表示する
+make help       # Makefileのヘルプを表示する
+```
+
+### バージョン情報
+
+バージョン情報は以下のコマンドで確認できます：
+
+```bash
+aws-risp --version
+aws-risp version
+```
