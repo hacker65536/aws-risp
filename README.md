@@ -21,6 +21,14 @@ go install github.com/hacker65536/aws-risp@latest
 ```bash
 git clone https://github.com/hacker65536/aws-risp.git
 cd aws-risp
+make build
+```
+
+makeを使用せずにビルドする場合：
+
+```bash
+git clone https://github.com/hacker65536/aws-risp.git
+cd aws-risp
 go build
 ```
 

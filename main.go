@@ -17,15 +17,18 @@ var (
 )
 
 func main() {
-
 	if version == "dev" {
 		version = versioninfo.Version
 		commit = versioninfo.Revision
 		date = versioninfo.LastCommit.Format(time.RFC3339)
 	} else {
-		// Goreleaser doesn't prefix with a `v`, which we expect
-		version = "v" + version
+		// バージョン文字列に'v'のプレフィックスが既にある場合は追加しない
+		if len(version) == 0 || version[0] != 'v' {
+			version = "v" + version
+		}
 	}
+
+	// rootコマンドのバージョン表示用
 	cmd.SetVersionInfo(version, commit, date)
 	cmd.Execute()
 }
