@@ -22,7 +22,7 @@ func main() {
 		commit = versioninfo.Revision
 		date = versioninfo.LastCommit.Format(time.RFC3339)
 	} else {
-		// バージョン文字列に'v'のプレフィックスが既にある場合は追加しない
+		// Do not add the 'v' prefix if it is already present in the version string
 		if len(version) == 0 || version[0] != 'v' {
 			version = "v" + version
 		}
