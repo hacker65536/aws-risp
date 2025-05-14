@@ -1,6 +1,6 @@
 # AWS-RISP
 
-AWS Reservation Information Service Provider (RISP) - AWSリザーブドインスタンスの情報を取得・表示するCLIツール
+AWS Reserved Instances and Savings Plans - AWSリザーブドインスタンス、セービングプランの情報を取得・表示するCLIツール
 
 ## 概要
 
