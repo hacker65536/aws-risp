@@ -53,7 +53,16 @@ func displayBuildInfo() {
 	}
 
 	fmt.Printf("Version:    %s\n", info.Main.Version)
-	fmt.Printf("Commit:     %s\n", info.Main.Sum)
+
+	commitHash := "unknown"
+	for _, setting := range info.Settings {
+		if setting.Key == "vcs.revision" {
+			commitHash = setting.Value
+			break
+		}
+	}
+
+	fmt.Printf("Commit:     %s\n", commitHash)
 }
 
 func displayStaticInfo() {
