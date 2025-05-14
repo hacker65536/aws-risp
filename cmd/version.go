@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"runtime"
+	"runtime/debug"
 
 	"github.com/spf13/cobra"
 )
@@ -18,7 +19,7 @@ var (
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Show version information of aws-risp",
+	Short: "AWS Reserved Instances and Savings Plans Cli",
 	Long: `Show detailed version information of the aws-risp CLI tool.
 This includes version number, build date, git commit hash,
 and Go runtime information.`,
@@ -43,7 +44,18 @@ func init() {
 
 // displayVersion は詳細なバージョン情報を表示する
 func displayVersion() {
-	fmt.Printf("aws-risp: AWS Reservation Information Service Provider\n")
+	buildInfo, ok := debug.ReadBuildInfo()
+	if !ok {
+		fmt.Println("Unable to determine version information.")
+		return
+	}
+
+	if buildInfo.Main.Version != "" {
+		fmt.Printf("Version: %s\n", buildInfo.Main.Version)
+	} else {
+		fmt.Println("Version: unknown")
+	}
+
 	fmt.Printf("Version:    %s\n", version)
 	fmt.Printf("Commit:     %s\n", commit)
 	fmt.Printf("Built:      %s\n", date)
