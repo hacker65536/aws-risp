@@ -11,15 +11,15 @@ import (
 // バージョン情報を格納する変数
 var (
 	// コンパイル時に -ldflags で設定される変数
-	version = "dev"
-	commit  = "none"
+	version = ""
+	commit  = ""
 	date    = "unknown"
 )
 
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "AWS Reserved Instances and Savings Plans Cli",
+	Short: "Display version information",
 	Long: `Show detailed version information of the aws-risp CLI tool.
 This includes version number, build date, git commit hash,
 and Go runtime information.`,
@@ -30,32 +30,31 @@ and Go runtime information.`,
 
 func init() {
 	rootCmd.AddCommand(versionCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// versionCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// versionCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // displayVersion は詳細なバージョン情報を表示する
 func displayVersion() {
+	// バージョン情報が設定されていない場合は、ビルド情報から取得を試みる
 	buildInfo, ok := debug.ReadBuildInfo()
-	if !ok {
-		fmt.Println("Unable to determine version information.")
-		return
+
+	if version == "" && ok {
+		if buildInfo.Main.Version != "" {
+			version = buildInfo.Main.Version
+		} else {
+			version = "unknown"
+		}
 	}
 
-	if buildInfo.Main.Version != "" {
-		fmt.Printf("Version: %s\n", buildInfo.Main.Version)
-	} else {
-		fmt.Println("Version: unknown")
+	if commit == "" && ok {
+		if buildInfo.Main.Sum != "" {
+			commit = buildInfo.Main.Sum
+		} else {
+			commit = "unknown"
+		}
 	}
 
+	fmt.Println("AWS Reserved Instances and Savings Plans CLI")
+	fmt.Println("-------------------------------------------")
 	fmt.Printf("Version:    %s\n", version)
 	fmt.Printf("Commit:     %s\n", commit)
 	fmt.Printf("Built:      %s\n", date)
