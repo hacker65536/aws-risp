@@ -35,29 +35,29 @@ func init() {
 // displayVersion は詳細なバージョン情報を表示する
 func displayVersion() {
 	// バージョン情報が設定されていない場合は、ビルド情報から取得を試みる
-	buildInfo, ok := debug.ReadBuildInfo()
-
-	if version == "" && ok {
-		if buildInfo.Main.Version != "" {
-			version = buildInfo.Main.Version
-		} else {
-			version = "unknown"
-		}
+	if version == "" && commit == "" {
+		displayBuildInfo()
+	} else {
+		displayStaticInfo()
 	}
 
-	if commit == "" && ok {
-		if buildInfo.Main.Sum != "" {
-			commit = buildInfo.Main.Sum
-		} else {
-			commit = "unknown"
-		}
+	fmt.Printf("Go version: %s\n", runtime.Version())
+	fmt.Printf("OS/Arch:    %s/%s\n", runtime.GOOS, runtime.GOARCH)
+}
+
+func displayBuildInfo() {
+	info, ok := debug.ReadBuildInfo()
+	if !ok {
+		fmt.Println("Build information not available.")
+		return
 	}
 
-	fmt.Println("AWS Reserved Instances and Savings Plans CLI")
-	fmt.Println("-------------------------------------------")
+	fmt.Printf("Version:    %s\n", info.Main.Version)
+	fmt.Printf("Commit:     %s\n", info.Main.Sum)
+}
+
+func displayStaticInfo() {
 	fmt.Printf("Version:    %s\n", version)
 	fmt.Printf("Commit:     %s\n", commit)
 	fmt.Printf("Built:      %s\n", date)
-	fmt.Printf("Go version: %s\n", runtime.Version())
-	fmt.Printf("OS/Arch:    %s/%s\n", runtime.GOOS, runtime.GOARCH)
 }
