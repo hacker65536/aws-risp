@@ -33,6 +33,7 @@ Supported services:
 Examples:
   aws-risp rsvCov ec2 rds
   aws-risp rsvCov --start 2023-01-01 --end 2023-01-31 --sort OnDemandCost ec2`,
+	Aliases: []string{"rsv-cov"},
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Println("rsvCov called")
 		ma := myaws.New()
