@@ -13,7 +13,7 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "aws-risp",
-	Short: "AWS Reservation Information Service Provider",
+	Short: "AWS Reserved Instances and Savings Plans Cli",
 	Long: `AWS-RISP is a command-line tool for retrieving and displaying 
 information about AWS Reserved Instances (RI).
 
