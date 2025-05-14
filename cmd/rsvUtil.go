@@ -35,6 +35,7 @@ Supported services:
 Examples:
   aws-risp rsvUtil
   aws-risp rsvUtil --start 2023-01-01 --end 2023-01-31 ec2 rds`,
+	Aliases: []string{"rsv-util"},
 	Run: func(cmd *cobra.Command, args []string) {
 		// Set date range if provided
 		if startUtil != "" {
